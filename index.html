@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Equipment &amp; Inspection Tracker – FBU-14</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--text:#1b2733;--muted:#6b7a89;--line:#e3e8ee;--brand:#0f5c8c;--ok:#1e8e5a;--okbg:#e2f5ec;--warn:#b86e00;--warnbg:#fff1d6;--bad:#c62828;--badbg:#fde4e4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161d;--card:#18212b;--text:#e8eef4;--muted:#93a2b1;--line:#2a3643;--brand:#4aa3d8;--ok:#4cc98d;--okbg:#14382a;--warn:#f0b04a;--warnbg:#3d2d0e;--bad:#ff7b7b;--badbg:#431a1a}}
+:root[data-theme="dark"]{--bg:#10161d;--card:#18212b;--text:#e8eef4;--muted:#93a2b1;--line:#2a3643;--brand:#4aa3d8;--ok:#4cc98d;--okbg:#14382a;--warn:#f0b04a;--warnbg:#3d2d0e;--bad:#ff7b7b;--badbg:#431a1a}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;padding:14px}
+.wrap{max-width:900px;margin:auto}
+header{background:var(--brand);color:#fff;border-radius:16px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header h1{margin:0;font-size:19px}header p{margin:3px 0 0;font-size:12px;opacity:.9}
+.badge{background:rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+.stat b{display:block;font-size:21px}.stat span{font-size:11px;color:var(--muted)}
+.s1 b{color:var(--ok)}.s2 b{color:var(--warn)}.s3 b{color:var(--bad)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px}
+.chip{flex:none;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.bar{display:flex;gap:8px;margin:6px 0 12px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:10px 16px;background:var(--brand);color:#fff;font-weight:700}
+.bar .sec{background:var(--card);color:var(--text);border:1px solid var(--line);font-weight:500;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.item img{width:100%;height:140px;object-fit:cover;display:block;cursor:pointer}
+.nophoto{height:50px;background:var(--bg);color:var(--muted);font-size:12px;display:flex;align-items:center;justify-content:center}
+.body{padding:12px}
+.cat{font-size:11px;color:var(--brand);font-weight:700}
+.name{font-size:17px;font-weight:700;margin:2px 0 8px}
+.row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-top:1px dashed var(--line)}
+.row span:first-child{color:var(--muted)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.pill{padding:3px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.p-ok{background:var(--okbg);color:var(--ok)}.p-warn{background:var(--warnbg);color:var(--warn)}.p-bad{background:var(--badbg);color:var(--bad)}.p-na{background:var(--bg);color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin-top:4px}
+.acts{display:flex;gap:6px;margin-top:8px}
+.acts button{flex:1;padding:7px;font-size:13px;background:var(--bg);color:var(--text);border:1px solid var(--line);font-weight:500}
+.acts .del{color:var(--bad)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.ov.show{display:flex}
+.sheet{background:var(--card);width:100%;max-width:520px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.sheet h2{margin:0 0 10px;font-size:18px}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;min-width:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#prev{max-width:100%;max-height:160px;border-radius:10px;margin-top:8px;display:none}
+.fb{display:flex;gap:8px;margin-top:14px}
+.fb .c{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+.fb button{flex:1}
+#big{max-width:94%;max-height:90%;border-radius:10px}
+#big-ov{align-items:center}
+@media print{.chips,.bar,.acts{display:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div><h1>Equipment &amp; Inspection Tracker</h1><p>Inspection dates, equipment status &amp; photos</p></div><div class="badge">FBU - 14</div></header>
+<div class="stats">
+<div class="stat s1"><b id="c1">0</b><span>Valid</span></div>
+<div class="stat s2"><b id="c2">0</b><span>Due within 30 days</span></div>
+<div class="stat s3"><b id="c3">0</b><span>Expired</span></div>
+</div>
+<div class="chips" id="chips"></div>
+<div class="bar"><button id="addBtn">+ Add Record</button><button class="sec" onclick="window.print()">Print</button></div>
+<div class="grid" id="list"></div>
+</div>
+
+<div class="ov" id="ov"><div class="sheet">
+<h2 id="ft">Add Record</h2>
+<label>Category</label><select id="fcat"></select>
+<label>Name / Number</label><input id="fname" placeholder="e.g. equipment number or employee name">
+<div class="two">
+<div><label>Inspection Date</label><input id="fd1" type="date"></div>
+<div><label>Next Inspection Date</label><input id="fd2" type="date"></div>
+</div>
+<label>Condition</label>
+<select id="fcond"><option>Good</option><option>Needs Maintenance</option><option>Out of Service</option></select>
+<label>Notes</label><textarea id="fnote" rows="2"></textarea>
+<label>Condition Photo</label><input id="fimg" type="file" accept="image/*">
+<img id="prev" alt="">
+<div class="fb"><button class="c" id="cancel">Cancel</button><button id="save">Save</button></div>
+</div></div>
+<div class="ov" id="big-ov"><img id="big" alt=""></div>
+
+<script>
+var CATS=['H2S Cards','Fire Extinguisher','SCBA','H2S Monitor','Gas Test Monitor','SB','Belt','Swivel','Steering Wheel','Crossover','Flanges','BOP & Valves','Unit Wires'];
+var rows=[],cur='All',editId=null,photo='',DB=null;
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function openDB(cb){try{var r=indexedDB.open('fbu14-inspection',1);r.onupgradeneeded=function(){r.result.createObjectStore('k')};r.onsuccess=function(){DB=r.result;try{var g=DB.transaction('k').objectStore('k').get('rows');g.onsuccess=function(){rows=g.result||[];cb()};g.onerror=cb}catch(e){cb()}};r.onerror=function(){cb()}}catch(e){cb()}}
+function save(){try{if(DB)DB.transaction('k','readwrite').objectStore('k').put(rows,'rows')}catch(e){}}
+var MC={'بطاقات H2S':'H2S Cards','طفاية الحريق':'Fire Extinguisher','الحزام (Belt)':'Belt','سويفل':'Swivel','ستيرينج ويل':'Steering Wheel','كروس أوفر':'Crossover','الفلنجات':'Flanges','BOP والفالفات':'BOP & Valves','تواير اليونت':'Unit Wires','جيدة':'Good','تحتاج صيانة':'Needs Maintenance','خارج الخدمة':'Out of Service'};
+function migrate(){rows.forEach(function(r){r.cat=MC[r.cat]||r.cat;r.cond=MC[r.cond]||r.cond});save()}
+function days(d){if(!d)return null;var a=new Date();a.setHours(0,0,0,0);return Math.round((new Date(d+'T00:00:00')-a)/864e5)}
+function chips(){var h='';['All'].concat(CATS).forEach(function(c){h+='<button class="chip'+(c===cur?' on':'')+'" data-c="'+esc(c)+'">'+esc(c)+'</button>'});$('chips').innerHTML=h;
+ Array.prototype.forEach.call($('chips').children,function(b){b.onclick=function(){cur=b.getAttribute('data-c');chips();render()}})}
+function render(){
+ var list=rows.filter(function(r){return cur==='All'||r.cat===cur}).sort(function(a,b){return (a.d2||'9')<(b.d2||'9')?-1:1});
+ var s1=0,s2=0,s3=0,h='';
+ list.forEach(function(r){var d=days(r.d2),cls='p-na',t='No date',rem='—';
+  if(d!==null){if(d<0){cls='p-bad';t='Expired';s3++;rem=(-d)+' days ago'}else if(d<=30){cls='p-warn';t='Expiring soon';s2++;rem=d+' days'}else{cls='p-ok';t='Valid';s1++;rem=d+' days'}}
+  var cc=r.cond==='Good'?'p-ok':(r.cond==='Needs Maintenance'?'p-warn':'p-bad');
+  h+='<div class="item">'+(r.img?'<img src="'+r.img+'" onclick="zoom(this.src)" alt="">':'<div class="nophoto">No photo</div>')+
+  '<div class="body"><div class="cat">'+esc(r.cat)+'</div><div class="name">'+esc(r.name)+'</div>'+
+  '<div class="pills"><span class="pill '+cc+'">'+esc(r.cond)+'</span><span class="pill '+cls+'">'+t+'</span></div>'+
+  '<div class="row"><span>Inspection</span><span>'+(r.d1||'—')+'</span></div>'+
+  '<div class="row"><span>Next Inspection</span><span>'+(r.d2||'—')+'</span></div>'+
+  '<div class="row"><span>Remaining</span><span>'+rem+'</span></div>'+
+  (r.note?'<div class="note">'+esc(r.note)+'</div>':'')+
+  '<div class="acts"><button onclick="edit(\''+r.id+'\')">Edit</button><button class="del" onclick="del(\''+r.id+'\')">Delete</button></div></div></div>'});
+ $('list').innerHTML=h||'<div class="empty">No records in this section. Tap + Add Record</div>';
+ $('c1').textContent=s1;$('c2').textContent=s2;$('c3').textContent=s3}
+function zoom(s){$('big').src=s;$('big-ov').classList.add('show')}
+$('big-ov').onclick=function(){this.classList.remove('show')};
+function openForm(r){editId=r?r.id:null;photo=r?(r.img||''):'';
+ $('ft').textContent=r?'Edit Record':'Add Record';
+ $('fcat').value=r?r.cat:(cur!=='All'?cur:CATS[0]);
+ $('fname').value=r?r.name:'';$('fd1').value=r?r.d1:'';$('fd2').value=r?r.d2:'';
+ $('fcond').value=r?r.cond:'Good';$('fnote').value=r?r.note:'';$('fimg').value='';
+ $('prev').style.display=photo?'block':'none';$('prev').src=photo;
+ $('ov').classList.add('show')}
+function edit(id){openForm(rows.filter(function(r){return r.id===id})[0])}
+function del(id){if(!confirm('Delete this record?'))return;rows=rows.filter(function(r){return r.id!==id});save();render()}
+$('addBtn').onclick=function(){openForm(null)};
+$('cancel').onclick=function(){$('ov').classList.remove('show')};
+$('fimg').onchange=function(){var f=this.files[0];if(!f)return;var rd=new FileReader();
+ rd.onload=function(){var im=new Image();im.onload=function(){var m=900,w=im.width,h=im.height,k=Math.min(1,m/Math.max(w,h));
+  var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+  photo=c.toDataURL('image/jpeg',.7);$('prev').src=photo;$('prev').style.display='block'};im.src=rd.result};rd.readAsDataURL(f)};
+$('save').onclick=function(){var n=$('fname').value.trim();if(!n){alert('Enter a name or number');return}
+ var o={id:editId||String(Date.now()),cat:$('fcat').value,name:n,d1:$('fd1').value,d2:$('fd2').value,cond:$('fcond').value,note:$('fnote').value.trim(),img:photo};
+ if(editId){rows=rows.map(function(r){return r.id===editId?o:r})}else{rows.push(o)}
+ save();$('ov').classList.remove('show');render()};
+CATS.forEach(function(c){var o=document.createElement('option');o.textContent=c;$('fcat').appendChild(o)});
+chips();openDB(function(){migrate();render()});
+</script>
+</body>
+</html>
